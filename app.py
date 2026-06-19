@@ -18,11 +18,6 @@ def health():
 
 @app.route("/generate-pdf", methods=["POST"])
 def generate():
-    # Verify secret
-    auth = request.headers.get("X-API-Secret", "")
-    if auth != API_SECRET:
-        return jsonify({"error": "Unauthorized"}), 401
-
     try:
         data = request.get_json()
         if not data:
