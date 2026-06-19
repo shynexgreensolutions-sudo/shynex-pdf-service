@@ -310,9 +310,10 @@ def generate_estimate_pdf(est_no, date_str, customer_name, customer_address,
           fontSize=8, textColor=BLACK, leading=14),
         p("<b>Terms &amp; Conditions</b><br/>" + "<br/>".join(terms),
           fontSize=7.5, textColor=BLACK, leading=12),
-        p("For : <b>SHYNEX GREEN SOLUTIONS</b><br/><br/><br/>"
-          "<b>Authorised Signatory</b>",
-          fontSize=8, textColor=BLACK, alignment=TA_RIGHT, leading=13),
+        p("For : <b>SHYNEX GREEN SOLUTIONS</b><br/><br/>"
+          "<i>System-Generated Estimate</i><br/>"
+          "<i>Signature Not Required</i>",
+          fontSize=8, textColor=GREY, alignment=TA_RIGHT, leading=13),
     ]], colWidths=[W*0.32, W*0.40, W*0.28])
     foot.setStyle(TableStyle([
         ("VALIGN",      (0,0),(-1,-1),"TOP"),
