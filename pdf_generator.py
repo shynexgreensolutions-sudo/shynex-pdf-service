@@ -44,7 +44,7 @@ def in_words(n):
     return say(int(round(n)))+" Rupees Only"
 
 def generate_estimate_pdf(est_no, date_str, customer_name, customer_address,
-                           items, output_path=None, valid_for="30 Days", terms=None):
+                           items, output_path=None, valid_for="15 Days", terms=None):
 
     PAGE_W, PAGE_H = A4
     LM = RM = 14*mm
