@@ -296,7 +296,7 @@ def generate_estimate_pdf(est_no, date_str, customer_name, customer_address,
     # ══════════════════════════════════════════════════════════════════════════
     if terms is None:
         terms = ["1. Payment: 100% advance before dispatch.",
-                 "2. Quotation valid for 30 days from date of issue.",
+                 "2. Quotation valid for 15 days from date of issue.",
                  "3. Prices are exclusive of delivery charges.",
                  "4. GST as applicable.",
                  "Thanks for doing business with us!"]
