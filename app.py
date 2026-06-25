@@ -30,7 +30,7 @@ def generate():
             customer_name    = data["customer_name"],
             customer_address = data.get("customer_address", ""),
             items            = data["items"],
-            valid_for        = data.get("valid_for", "30 Days"),
+            valid_for        = data.get("valid_for", "15 Days"),
             terms            = data.get("terms", None),
         )
 
