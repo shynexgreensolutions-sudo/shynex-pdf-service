@@ -18,7 +18,7 @@ API_SECRET = os.environ.get("PDF_API_SECRET", "shynex-pdf-secret-2026")
 
 @app.route("/health", methods=["GET"])
 def health():
-    return jsonify({"ok": True, "service": "Shynex PDF Generator"})
+    return jsonify({"ok": True, "service": "Shynex PDF Generator", "version": "1.1.0"})
 
 @app.route("/generate-pdf", methods=["POST"])
 def generate():
