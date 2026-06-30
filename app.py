@@ -4,12 +4,14 @@ Deploy this on Render.com (free tier)
 This service receives quote data and returns a PDF estimate as base64.
 """
 import os, base64, traceback
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, send_from_directory
 import requests as http
 from pdf_generator import generate_estimate_pdf
-from catalogue_generator import generate_catalogue_pdf
 
 app = Flask(__name__)
+
+STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+CATALOGUE_FILENAME = "Shynex_Catalogue.pdf"
 
 # Simple secret key to prevent unauthorized use
 API_SECRET = os.environ.get("PDF_API_SECRET", "shynex-pdf-secret-2026")
@@ -50,27 +52,15 @@ def generate():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/catalogue", methods=["GET"])
-def generate_catalogue():
+def get_catalogue():
     try:
-        agent_url = os.environ.get(
-            "AGENT_PRODUCTS_URL",
-            "https://shynex-ai-agent.shynexgreensolutions.workers.dev/products"
-        )
-        resp = http.get(agent_url, timeout=20)
-        resp.raise_for_status()
-        products = resp.json().get("products", [])
-        if not products:
-            return jsonify({"error": "No products returned from agent"}), 502
-
-        pdf_bytes = generate_catalogue_pdf(products)
-        return Response(
-            pdf_bytes,
+        return send_from_directory(
+            STATIC_DIR,
+            CATALOGUE_FILENAME,
             mimetype="application/pdf",
-            headers={
-                "Content-Disposition":
-                    'attachment; filename="Shynex-Green-Solutions-Product-Catalogue.pdf"',
-                "Cache-Control": "public, max-age=3600",
-            }
+            as_attachment=True,
+            download_name="Shynex-Green-Solutions-Product-Catalogue.pdf",
+            max_age=3600,
         )
     except Exception as e:
         traceback.print_exc()
