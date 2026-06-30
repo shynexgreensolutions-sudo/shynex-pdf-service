@@ -4,8 +4,10 @@ Deploy this on Render.com (free tier)
 This service receives quote data and returns a PDF estimate as base64.
 """
 import os, base64, traceback
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
+import requests as http
 from pdf_generator import generate_estimate_pdf
+from catalogue_generator import generate_catalogue_pdf
 
 app = Flask(__name__)
 
@@ -46,6 +48,34 @@ def generate():
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
+@app.route("/catalogue", methods=["GET"])
+def generate_catalogue():
+    try:
+        agent_url = os.environ.get(
+            "AGENT_PRODUCTS_URL",
+            "https://shynex-ai-agent.shynexgreensolutions.workers.dev/products"
+        )
+        resp = http.get(agent_url, timeout=20)
+        resp.raise_for_status()
+        products = resp.json().get("products", [])
+        if not products:
+            return jsonify({"error": "No products returned from agent"}), 502
+
+        pdf_bytes = generate_catalogue_pdf(products)
+        return Response(
+            pdf_bytes,
+            mimetype="application/pdf",
+            headers={
+                "Content-Disposition":
+                    'attachment; filename="Shynex-Green-Solutions-Product-Catalogue.pdf"',
+                "Cache-Control": "public, max-age=3600",
+            }
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
